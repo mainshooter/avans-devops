@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  frontend:
+    image: week3_frontend
+    ports:
+      - "4200:4200"
+    networks:
+      - week4
+  backend:
+    image: week3_api
+    ports:
+      - "3000:3000"
+    networks:
+      - week4
+    environment:
+      - host=db
+      - db_username=keileuk
+      - db_password=keileukssss
+      - params=?authSource=admin
+  db:
+    image: mongo
+    networks:
+      - week4
+    environment:
+      - MONGO_INITDB_DATABASE=Connections
+      - MONGO_INITDB_ROOT_USERNAME=keileuk
+      - MONGO_INITDB_ROOT_PASSWORD=keileukssss
+    volumes:
+      - ./mongo-volume:/data/db
+networks:
+  week4:
