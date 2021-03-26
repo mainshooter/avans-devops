@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  chat:
+    build: '.'
+    environment:
+      - PORT=5000
+    ports:
+      - 3000:3000
+  prometheus:
+    image: prom/prometheus:v2.25.2
+    ports:
+      - 9090:9090
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+  db-exporter:
+     image:  bitnami/mongodb-exporter:0.11
+     environment:
+      -  MONGODB_URI=mongodb://db:27017
+     restart: always
+     ports:
+      -  9216:9216
+  db:
+    image: mongo
+    volumes:
+      - ./mongo-volume:/data/db
+  grafana:
+    build: ./grafana
+    ports:
+      - 4000:3000
+volumes:
+  prometheus-data:

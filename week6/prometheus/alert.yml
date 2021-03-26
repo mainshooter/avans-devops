@@ -1,0 +1,9 @@
+groups:
+  - name: DownAlert
+    rules:
+      - alert: "On chat down"
+        expr: up{job="chat"} < 1
+        for: 15s
+      - alert: "On DB down"
+        expr: up{job="db"} < 1
+        for: 5s
